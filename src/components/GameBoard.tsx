@@ -18,14 +18,27 @@ export const GameBoard = () => {
         setBoard(boardTemp);
     }
 
+    const renderBoard = () => {
+        if(!board) return [];
+        const newBoard = [];
+        for(let i=0;i<DIM;i++){
+            const arr = [];
+            for(let j=0;j<DIM;j++){
+                arr.push(<div className="box"><img src={board[j][i]} width={"100%"} height={"100%"} alt="..." /></div>);
+            }
+            newBoard.push(<div onClick={() => addDot(DIM-1, i)}>{React.Children.toArray(arr)}</div>);
+        }
+        return newBoard;
+    }
+
     const addDot = (row: number, col: number) => {
         if(win !== 0) return;
-        if(col === -1) alert("Full column...");
+        if(row === -1) alert("Full column...");
         else if(board && board[row][col] === vuoto) {
             board[row][col] = turn === 1 ? rosso : giallo;
             setBoard([...board]);
         }
-        else addDot(row, col-1);
+        else addDot(row-1, col);
     }  
 
     const reset = () => {
@@ -98,11 +111,9 @@ export const GameBoard = () => {
             <h1 className="fw-bold">Force 4 game</h1>
             <p className="fs-3">Player 1 use <span className="redDot">red</span> dot, Player 2 use <span className="yellowDot">yellow</span> dot</p>
             <p className="fs-3">Player {turn} it's your turn</p>
-            {win === 1 || win === 2 ? <p className="fs-3">Player {win} has won!</p> : win === 3 ? <p className="fs-3">Tie...</p> : null}
+            {win === 1 || win === 2 ? <p className="fs-3">Player <span style={{color: win === 1 ? "#dc143c" : "yellow"}}>{win}</span> has won!</p> : win === 3 ? <p className="fs-3">Tie...</p> : null}
             <div className="game-board">
-                {React.Children.toArray(board?.map((arr, index) => {
-                    return <div onClick={() => addDot(index/*col*/, DIM-1/*row*/)}>{React.Children.toArray(arr.map((img) => <div className="box" ><img src={img} width={"100%"} height={"100%"} alt="..." /></div>))}</div>
-                }))}
+                {React.Children.toArray(renderBoard())}
             </div>
             <button type="button" className="btn btn-danger mt-3" onClick={() => reset()}>Reset</button>
         </>
