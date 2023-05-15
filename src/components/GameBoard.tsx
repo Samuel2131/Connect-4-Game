@@ -5,28 +5,30 @@ import giallo from "../img/giallo.png";
 import vuoto from "../img/vuoto.png";
 import { useEffect, useState } from "react";
 
-const DIM = 8; 
+const ROW = 6;
+const COL = 7 
 
 export const GameBoard = () => {
     const [board, setBoard] = useState<string[][] | null>(null);
+    const [coord, setCoord] = useState<number[][] | null>(null);
     const [turn, setTurn] = useState<1 | 2>(Math.random() > 0.5 ? 1 : 2);
     const [win, setWin] = useState<0 | 1 | 2 | 3>(0);
 
     const initBoard = () => {
         const boardTemp: string[][] = [];
-        for(let i=0;i<DIM;i++) boardTemp.push(Array.from({length: DIM}, () => vuoto))
+        for(let i=0;i<ROW;i++) boardTemp.push(Array.from({length: COL}, () => vuoto))
         setBoard(boardTemp);
     }
 
     const renderBoard = () => {
         if(!board) return [];
         const newBoard = [];
-        for(let i=0;i<DIM;i++){
+        for(let i=0;i<COL;i++){
             const arr = [];
-            for(let j=0;j<DIM;j++){
-                arr.push(<div className="box"><img src={board[j][i]} width={"100%"} height={"100%"} alt="..." /></div>);
+            for(let j=0;j<ROW;j++){
+                arr.push(<div className="box" ><img src={board[j][i]} width={"100%"} height={"100%"} alt="..." /></div>);
             }
-            newBoard.push(<div onClick={() => addDot(DIM-1, i)}>{React.Children.toArray(arr)}</div>);
+            newBoard.push(<div onClick={() => addDot(ROW-1, i)}>{React.Children.toArray(arr)}</div>);
         }
         return newBoard;
     }
@@ -49,8 +51,8 @@ export const GameBoard = () => {
 
     const checkWin = () => {
         if(!board) return;
-        for(let row=0;row<DIM;row++){
-            for(let col=0;col<DIM;col++){
+        for(let row=0;row<ROW;row++){
+            for(let col=0;col<COL;col++){
                 if(board[row][col] !== vuoto){
                     //Row:
                     let tempArr = [];
@@ -108,7 +110,7 @@ export const GameBoard = () => {
 
     return(
         <>
-            <h1 className="fw-bold">Force 4 game</h1>
+            <h1 className="fw-bold">Connect 4 game</h1>
             <p className="fs-3">Player 1 use <span className="redDot">red</span> dot, Player 2 use <span className="yellowDot">yellow</span> dot</p>
             <p className="fs-3">Player {turn} it's your turn</p>
             {win === 1 || win === 2 ? <p className="fs-3">Player <span style={{color: win === 1 ? "#dc143c" : "yellow"}}>{win}</span> has won!</p> : win === 3 ? <p className="fs-3">Tie...</p> : null}
