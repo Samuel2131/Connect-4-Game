@@ -14,6 +14,7 @@
 }
 
 .App-header {
+  user-select: none;
   background-color: #282c34;
   min-height: 100vh;
   display: flex;
@@ -49,6 +50,10 @@
 	
 	display: grid;
 	grid-template: repeat(7, 1fr) / repeat(7, 1fr);
+}
+
+.ms-6{
+  margin-left: 170px;
 }
 
 .box
